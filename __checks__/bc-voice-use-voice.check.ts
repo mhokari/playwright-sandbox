@@ -1,4 +1,3 @@
-import * as path from 'path'
 import { BrowserCheck } from 'checkly/constructs'
 
 new BrowserCheck('bc-voice-use-voice', {
@@ -13,7 +12,7 @@ new BrowserCheck('bc-voice-use-voice', {
         args: [
           '--use-fake-device-for-media-stream',
           '--use-fake-ui-for-media-stream',
-          '--use-file-for-fake-audio-capture=__checks__/marathon-message.wav',
+          '--use-file-for-fake-audio-capture=/__checks__/marathon-message.wav',
         ],
       },
     },

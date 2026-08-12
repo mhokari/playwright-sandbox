@@ -6,8 +6,9 @@ const MIN_RESPONSE_WORDS = 8
 const RESPONSE_TIMEOUT_MS = 60_000
 const ACTION_TIMEOUT_MS = 15_000
 
-// The WAV fixture is bundled alongside this spec
-export const AUDIO_FILE = path.join(__dirname, 'marathon-message.wav')
+// __dirname always resolves to '/' on Checkly's runtime, so derive the
+// directory from __filename (which reflects the real project-relative path).
+export const AUDIO_FILE = path.join(path.dirname(__filename), 'marathon-message.wav')
 
 function wordCount(text: string): number {
   const trimmed = text.trim()
