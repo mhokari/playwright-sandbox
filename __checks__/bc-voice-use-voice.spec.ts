@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-const TARGET_URL = process.env.ENVIRONMENT_URL ?? 'https://voice.brandconcierge.ai'
+const TARGET_URL = process.env.ENVIRONMENT_URL ?? 'https://d3mey6isb8np59.cloudfront.net/dsg-bc-voice/'
 const ACTION_TIMEOUT_MS = 15_000
 
 test('BC Voice – Use Voice Mode', async ({ page }) => {
