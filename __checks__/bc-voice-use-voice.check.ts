@@ -12,7 +12,9 @@ new BrowserCheck('bc-voice-use-voice', {
         args: [
           '--use-fake-device-for-media-stream',
           '--use-fake-ui-for-media-stream',
-          '--use-file-for-fake-audio-capture=/__checks__/marathon-message.wav',
+          // Relative to the check's cwd (/check/<uuid>), which is where Checkly
+          // places the check root — NOT the same as an absolute path from '/'.
+          '--use-file-for-fake-audio-capture=__checks__/marathon-message.wav',
         ],
       },
     },
