@@ -1,11 +1,20 @@
 import { readFileSync } from 'fs';
 import { resolve, isAbsolute } from 'path';
-import yaml from 'js-yaml';
 
-/** Shape of config/bc-voice.config.yaml. */
+/** Shape of config/bc-voice.config.json. */
 export interface BcVoiceConfig {
+  /** The page under test. */
   url: string;
+  /**
+   * Used for the text test, and spoken in the generated voice fixtures. If you
+   * change this, regenerate the audio: ./scripts/generate-audio.sh
+   */
   textMessage: string;
+  /**
+   * A reply passes when its word count is at least this value. The text/dictate
+   * reply is often a short clarifying question (~15 words), so keep this a modest
+   * floor that still distinguishes a real answer from an empty/error reply.
+   */
   minResponseWords: number;
   audio: {
     /** Absolute path to the WAV fed to the fake mic in Dictate mode. */
@@ -14,7 +23,9 @@ export interface BcVoiceConfig {
     voice: string;
   };
   timeouts: {
+    /** How long to wait for the AI response to finish generating. */
     responseMs: number;
+    /** How long to wait for individual UI actions/elements. */
     actionMs: number;
   };
 }
@@ -22,7 +33,7 @@ export interface BcVoiceConfig {
 /** Repo root (two levels up from tests/support). */
 export const REPO_ROOT = resolve(__dirname, '..', '..');
 
-const CONFIG_PATH = resolve(REPO_ROOT, 'config', 'bc-voice.config.yaml');
+const CONFIG_PATH = resolve(REPO_ROOT, 'config', 'bc-voice.config.json');
 
 function toAbs(p: string): string {
   return isAbsolute(p) ? p : resolve(REPO_ROOT, p);
@@ -30,20 +41,20 @@ function toAbs(p: string): string {
 
 function required<T>(value: T | undefined | null, name: string): T {
   if (value === undefined || value === null || value === '') {
-    throw new Error(`bc-voice.config.yaml: missing required field "${name}"`);
+    throw new Error(`bc-voice.config.json: missing required field "${name}"`);
   }
   return value;
 }
 
 let cached: BcVoiceConfig | undefined;
 
-/** Loads, validates, and caches the YAML config. Audio paths are resolved to absolute. */
+/** Loads, validates, and caches the config. Audio paths are resolved to absolute. */
 export function loadConfig(): BcVoiceConfig {
   if (cached) return cached;
 
-  const raw = yaml.load(readFileSync(CONFIG_PATH, 'utf8')) as any;
+  const raw = JSON.parse(readFileSync(CONFIG_PATH, 'utf8')) as any;
   if (!raw || typeof raw !== 'object') {
-    throw new Error(`bc-voice.config.yaml: could not parse config at ${CONFIG_PATH}`);
+    throw new Error(`bc-voice.config.json: could not parse config at ${CONFIG_PATH}`);
   }
 
   cached = {

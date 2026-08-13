@@ -24,9 +24,10 @@ The suite is **Chromium-only**: voice injection relies on Chromium's
 
 ## Configuration
 
-All tunables live in [`config/bc-voice.config.yaml`](config/bc-voice.config.yaml):
+All tunables live in [`config/bc-voice.config.json`](config/bc-voice.config.json):
 the target URL, the text/voice message, the minimum response word count, the audio
-fixture paths, and timeouts. Change them there without touching test code.
+fixture paths, and timeouts. Change them there without touching test code (field
+docs are on the `BcVoiceConfig` interface in `tests/support/config.ts`).
 
 ## Voice fixtures
 
@@ -60,10 +61,10 @@ file with no gap.
 ## Layout
 
 ```
-config/bc-voice.config.yaml       # all tunables
+config/bc-voice.config.json       # all tunables
 fixtures/audio/marathon-message.wav
 scripts/generate-audio.sh         # regenerates the WAV
-tests/support/config.ts           # loads + validates the YAML
+tests/support/config.ts           # loads + validates the config
 tests/support/concierge.page.ts   # Page Object
 tests/bc-voice.spec.ts            # the 3 tests
 ```

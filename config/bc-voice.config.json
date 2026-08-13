@@ -1,0 +1,13 @@
+{
+  "url": "https://d3mey6isb8np59.cloudfront.net/dsg-bc-voice/index.html",
+  "textMessage": "I am preparing a full marathon and want to have a pair of new shoes.",
+  "minResponseWords": 8,
+  "audio": {
+    "dictate": "fixtures/audio/marathon-message.wav",
+    "voice": "fixtures/audio/marathon-message.wav"
+  },
+  "timeouts": {
+    "responseMs": 60000,
+    "actionMs": 15000
+  }
+}

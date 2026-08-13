@@ -5,14 +5,14 @@
 #
 # Requirements (macOS dev machine): `say` and `ffmpeg` on PATH.
 #
-# The spoken message is read from config/bc-voice.config.yaml (textMessage) so the
+# The spoken message is read from config/bc-voice.config.json (textMessage) so the
 # audio always matches the text the tests expect.
 #
 # Usage: ./scripts/generate-audio.sh
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONFIG="$ROOT/config/bc-voice.config.yaml"
+CONFIG="$ROOT/config/bc-voice.config.json"
 OUT_DIR="$ROOT/fixtures/audio"
 OUT_WAV="$OUT_DIR/marathon-message.wav"
 VOICE="${SAY_VOICE:-Samantha}"
@@ -24,8 +24,8 @@ for bin in say ffmpeg; do
   fi
 done
 
-# Extract the textMessage value from the YAML (simple, quote-tolerant grep).
-MESSAGE="$(sed -n 's/^textMessage:[[:space:]]*//p' "$CONFIG" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")"
+# Extract the textMessage value from the JSON config.
+MESSAGE="$(sed -n 's/^[[:space:]]*"textMessage"[[:space:]]*:[[:space:]]*"\(.*\)",\{0,1\}$/\1/p' "$CONFIG")"
 if [ -z "$MESSAGE" ]; then
   echo "error: could not read textMessage from $CONFIG" >&2
   exit 1

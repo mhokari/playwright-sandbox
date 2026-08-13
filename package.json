@@ -15,9 +15,5 @@
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.2.0",
     "checkly": "8.16.0"
-  },
-  "dependencies": {
-    "@types/js-yaml": "^4.0.9",
-    "js-yaml": "^5.2.3"
   }
 }
