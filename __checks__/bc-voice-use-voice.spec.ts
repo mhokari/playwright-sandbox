@@ -27,10 +27,21 @@ test('Use Voice mode: spoken message via fake mic gets a substantive reply', asy
 
   const baseline = await replies.count()
 
-  // Click "Use Voice" button - the fake mic streams the WAV to backend STT
+  // Click "Use Voice" button to request mic access
   await voiceButton.click({ timeout: ACTION_TIMEOUT_MS })
 
-  // Wait for a new reply to appear
+  // Wait for the button's aria-label to become "Stop voice mode" before
+  // treating the mic as active. The --use-file-for-fake-audio-capture flag
+  // feeds audio to getUserMedia, but the backend STT only processes input
+  // once the app is actively recording (indicated by the "Stop voice mode"
+  // aria-label). Do NOT proceed while the button still shows any other label
+  // (white, gray, or blue icon states).
+  await expect(voiceButton).toHaveAttribute('aria-label', 'Stop voice mode', {
+    timeout: ACTION_TIMEOUT_MS,
+  })
+
+  // Now the button says "Stop voice mode" — the app is actively recording
+  // and consuming the WAV audio from the fake mic capture. Wait for a new reply.
   await expect
     .poll(() => replies.count(), {
       timeout: RESPONSE_TIMEOUT_MS,
